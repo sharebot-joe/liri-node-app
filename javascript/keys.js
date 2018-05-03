@@ -7,8 +7,12 @@ exports.twitter = {
   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 };
 
+// exports.spotify = {  // From David
+//   id: '34e84d93de6a4650815e5420e0361fd3',
+//   secret: '5162cd8b5cf940f48702dffe096c2acb'
+// };
+
 exports.spotify = {
   id: process.env.SPOTIFY_ID,
   secret: process.env.SPOTIFY_SECRET
 };
-

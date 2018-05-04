@@ -8,7 +8,12 @@
 // include packages  
 
 var dotenv = require("dotenv").config();
-var inquirer = require('inquirer')
+var inquirer = require('inquirer');
+
+// include moment.js
+var moment = require('moment');
+moment.suppressDeprecationWarnings = true;
+
 
 var keys = require('./keys.js');
 var Spotify = require('node-spotify-api');
@@ -39,7 +44,7 @@ var inputString = process.argv;
 
 // Parses the command line argument to capture optional arguments
 var command = inputString[2];
-// var arg1 = inputString[3];
+var arg1 = inputString[3];
 // console.log('command: ', command)
 // console.log('arg1: ', arg1)
 if(command === 'my-tweets') {
@@ -48,35 +53,39 @@ if(command === 'my-tweets') {
   //   console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
   //   console.log('body:', body); // Print the HTML for the Google homepage.
   // });
-  var params = {screen_name: 'real_joeyk', count: 3};
+
+  console.log('\n***************************************************\n')
+
+  var params = {screen_name: 'real_joeyk', count: 20};
+  console.log('Retrieving your last ' + params.count + ' tweets...')
+  console.log('\n***************************************************\n')
   client.get('statuses/user_timeline', params, function(error, tweets, response) {
     if (!error) {
       for (var key in tweets) {
         var text = tweets[key].text;
-        // var volume = jsonResponse.trends[key].tweet_volume;
-        console.log(key, "text - " + text);
-      }
-      
-      // console.log('response' + console.dir(response));
-      // console.log(typeof response)
+        var date = tweets[key].created_at;
+        var longdate = moment(date).format("dddd, MMMM Do YYYY, h:mm:ss a");
 
+        console.log('Tweet #' + key + ': ' + '"' + text + '"');
+        console.log(longdate);
+        console.log('\n- - - - - - - - - - - - - - - - - - - - - - - - - -\n')
+      }
     }
   });
-  // client.get('https://api.twitter.com/1.1/search/tweets.json', {q: 'from:name param',count: "3"},  function(error, tweets, response){
-  //   if(error) {
-  //     throw error;
-  //   } else {
-  //     console.log(tweets);  
-  //   }
-  // });
-  // client.twitter(response) {
-  //   show your last 20 tweets
-  //   show when they were created
-  // }
-
-  // console.log(20 tweets)
 }
 
+if(command === 'spotify-this-song' && arg1 != '') {
+  //Checking that user inputted an actual song title
+  validateSong(arg1)
+}
+
+function validateSong(song) {
+  if (value.length) {
+    return true;
+  } else {
+    return 'Please enter your username or e-mail address.';
+  }
+}
 // inquirer.prompt([
 
 //   {

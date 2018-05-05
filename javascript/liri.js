@@ -73,19 +73,37 @@ if(command === 'my-tweets') {
     }
   });
 }
-
+ 
 if(command === 'spotify-this-song' && arg1 != '') {
-  //Checking that user inputted an actual song title
-  validateSong(arg1)
+  console.log('\n***************************************************\n')
+  console.log('Looking up the song, ' + arg1)
+  console.log('\n***************************************************\n')
+  spotify
+    .search({ type: 'track', query: 'All the Small Things', limit: 2 })
+    .then(function(response) {
+      var songObjects = response.tracks.items
+      console.log(songObjects)
+      for (var key in songObjects) {
+        var artists = response.tracks.items[key].artists
+        artists.forEach(console.log(this.name))
+        
+        var name = response.tracks.items[key].name
+        var preview_url = response.tracks.items[key].preview_url
+        var album = response.tracks.items[key].album.name
+
+
+        console.log('Artist: ' + artists);
+        console.log('Song: ' + name);
+        console.log('Preview: ' + preview_url);
+        console.log('Album: ' + album);
+        console.log('\n- - - - - - - - - - - - - - - - - - - - - - - - - -\n')
+      }
+    })
+    .catch(function(err) {
+      console.log('That\s not a song in the Spotify database. Try another one!')
+    }); 
 }
 
-function validateSong(song) {
-  if (value.length) {
-    return true;
-  } else {
-    return 'Please enter your username or e-mail address.';
-  }
-}
 // inquirer.prompt([
 
 //   {

@@ -1,10 +1,10 @@
 # liri-node-app
 
 
-![LIRI](https://github.com/sharebot-joe/liri-node-app/blob/master/letterL.png "LIRI" =250x250)
+![LIRI](letterL.png "LIRI" =250x250)
 ![](https://gyazo.com/eb5c5741b6a9a16c692170a41a49c858.png =250x250)
 
-![LIRI](https://github.com/sharebot-joe/liri-node-app/blob/master/letterL.png "LIRI" | width=200)
+![LIRI](letterL.png "LIRI" | width=200)
 ![](https://gyazo.com/eb5c5741b6a9a16c692170a41a49c858.png | width=100)
 
 #### LIRI is like iPhone's SIRI. However, while SIRI is a Speech Interpretation and Recognition Interface, LIRI is a Language Interpretation and Recognition Interface. LIRI takes in commands via the command line and gives you back data.

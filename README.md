@@ -19,14 +19,14 @@ To use LIRI to retrieve API data, you'll need to create a .env file with your pe
 
 **Spotify API keys**
 
-`SPOTIFY_ID=your-spotify-id`
+`SPOTIFY_ID=your-spotify-id`<br/>
 `SPOTIFY_SECRET=your-spotify-secret`
 
 **Twitter API keys**
 
-`TWITTER_CONSUMER_KEY=your-twitter-consumer-key`
-`TWITTER_CONSUMER_SECRET=your-twitter-consumer-secret`
-`TWITTER_ACCESS_TOKEN_KEY=your-access-token-key`
+`TWITTER_CONSUMER_KEY=your-twitter-consumer-key`<br/>
+`TWITTER_CONSUMER_SECRET=your-twitter-consumer-secret`<br/>
+`TWITTER_ACCESS_TOKEN_KEY=your-access-token-key`<br/>
 `TWITTER_ACCESS_TOKEN_SECRET=your-twitter-access-token-secret`
 
 The .env file will be used by the dotenv package to set environment variables for your node session.

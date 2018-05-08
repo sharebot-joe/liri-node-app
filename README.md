@@ -8,29 +8,29 @@
 
 LIRI accepts the following commands:
 
-  *`my-tweets` will show your last 20 tweets and when they were created
+   `my-tweets` will show your last 20 tweets and when they were created
 
-  *`spotify-this-song <song name>` will show information about the song retrived from the Spotify API.
+   `spotify-this-song <song name>` will show information about the song retrived from the Spotify API.
 
-  *`movie-this <movie name>` will show information about the movie retrieved from the OMDB API
+   `movie-this <movie name>` will show information about the movie retrieved from the OMDB API
 
-  *`do-what-it-says` will take the text inside of random.txt and use it to call one of LIRI's commands.
+   `do-what-it-says` will take the text inside of random.txt and use it to call one of LIRI's commands.
 
 ## Environment Variables
 
 To use LIRI to call API data, you'll need to create a .env file with your individual API keys. Create a file named .env, add the following to it, replacing the values with your API keys (no quotes) once you have them:
 
-#### Spotify API keys
+#### **Spotify API keys**
 
-SPOTIFY_ID=your-spotify-id
-SPOTIFY_SECRET=your-spotify-secret
+* SPOTIFY_ID=your-spotify-id
+* SPOTIFY_SECRET=your-spotify-secret
 
-#### Twitter API keys
+#### **Twitter API keys**
 
-TWITTER_CONSUMER_KEY=your-twitter-consumer-key
-TWITTER_CONSUMER_SECRET=your-twitter-consumer-secret
-TWITTER_ACCESS_TOKEN_KEY=your-access-token-key
-TWITTER_ACCESS_TOKEN_SECRET=your-twitter-access-token-secret
+* TWITTER_CONSUMER_KEY=your-twitter-consumer-key
+* TWITTER_CONSUMER_SECRET=your-twitter-consumer-secret
+* TWITTER_ACCESS_TOKEN_KEY=your-access-token-key
+* TWITTER_ACCESS_TOKEN_SECRET=your-twitter-access-token-secret
 
 This file will be used by the dotenv package to set environment variables for your session.
 

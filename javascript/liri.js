@@ -1,179 +1,285 @@
-// Testing wincred on Github
-
-// var express = require('express');
-// var router = express.Router();
-
-
-
 // include packages  
-
 var dotenv = require("dotenv").config();
 var inquirer = require('inquirer');
+var request = require('request');
+var fs  = require("fs");
 
 // include moment.js
 var moment = require('moment');
 moment.suppressDeprecationWarnings = true;
 
-
 var keys = require('./keys.js');
 var Spotify = require('node-spotify-api');
 var Twitter = require('twitter');
-var fs = require('fs');
 
-
-
-console.log('keys: ', keys)
-// console.log('process.env: ', process.env)
 // create app clients
 var client = new Twitter(keys.twitter);
 var spotify = new Spotify(keys.spotify);
- 
-// // This code works
-// spotify.search({ type: 'track', query: 'dancing in the moonlight' }, function(err, data) {
-//     if ( err ) {
-//         console.log('Error occurred: ' + err);
-//         return;
-//     }
- 
-//   response = JSON.stringify(data)
-//   console.log(response)
-// });
 
-// Takes in all of the command line arguments
-var inputString = process.argv;
+ // Array of Liri commands
+var commands = ['my-tweets', 'spotify-this-song', 'movie-this', 'do-what-it-says']
 
-// Parses the command line argument to capture optional arguments
-var command = inputString[2];
-var arg1 = inputString[3];
-// console.log('command: ', command)
-// console.log('arg1: ', arg1)
-if(command === 'my-tweets') {
-  // client.get('statuses/lookup', 3, function (error, response, body) {
-  //   console.log('error:', error); // Print the error if one occurred
-  //   console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-  //   console.log('body:', body); // Print the HTML for the Google homepage.
-  // });
+// random.txt
+var lines = fs.readFileSync('../random.txt').toString().split('\n');
+var lines_count = lines.length - 1;
 
-  console.log('\n***************************************************\n')
+// Display help
+displayHelp()
+getInput()
 
-  var params = {screen_name: 'real_joeyk', count: 20};
-  console.log('Retrieving your last ' + params.count + ' tweets...')
-  console.log('\n***************************************************\n')
-  client.get('statuses/user_timeline', params, function(error, tweets, response) {
-    if (!error) {
+function getInput() {
+  // Ask for user input
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "userInput",
+      message: "Hi, I'm Liri. How may i assist you?",
+      validate: function validateInput (name) {
+        var splits = name.split(" ");
+        var liriCommand = splits[0];
+        var liriArg = splits.slice(1).join(' ')
+        if (commands.includes(liriCommand)) {
+          return true
+        } else {
+          console.log('\n***************************************************\n')
+          console.log('Invalid command! Try again!')
+          console.log('\n***************************************************\n')
+          return false
+        }
+      }
+    }
+
+  ]).then(function(answer) {
+    var input = answer.userInput
+    var splits = input.split(" ");
+    var liriCommand = splits[0];
+    var liriArg = splits.slice(1).join(' ')
+    runLiri(liriCommand, liriArg)
+  });
+}
+
+function runLiri(command, argString) {
+
+  // Handling invalid user command
+  if(!commands.includes(command)) {
+    console.log('\n***************************************************\n')
+    console.log('Invalid command! Try again!')
+    displayHelp()
+  }
+  // Code for the 'my-tweets' command. This will show your last 20 tweets and when they were created at in your terminal/bash window. 
+  if(command === 'my-tweets') {
+    console.log('\n***************************************************\n')
+    var params = {screen_name: 'real_joeyk', count: 20};
+    console.log('Retrieving your last ' + params.count + ' tweets...')
+    console.log('\n***************************************************\n')
+    lookupTweets(params)
+  }
+
+  // Code for the 'spotify-this-song' command. This will show the following information about the song in your terminal/bash window: 
+  //    * Artist(s)
+  //    * The song's name
+  //    * A preview link of the song from Spotify
+  //    * The album that the song is from
+
+  if(command === 'spotify-this-song' && argString != '') {
+    console.log('\n***************************************************\n')
+    console.log('Looking up the song, ' + argString)
+    console.log('\n***************************************************\n')
+    var params = { type: 'track', query: '"' + argString + '"', limit: 10 }
+    lookupSong(params) 
+  } else if(command === 'spotify-this-song' && argString === '') {
+    var params = { type: 'track', query: '"The Sign"', artist : '"Ace of Base"',  limit: 1 }
+    console.log('\n- - - - - - - - - - - - - - - - - - - - - - - - - -\n')
+    lookupSong(params)
+  }
+  // Code for the 'movie-this' command. This will output the following information to your terminal/bash window: 
+  //    * Title of the movie.
+  //    * Year the movie came out.
+  //    * IMDB Rating of the movie.
+  //    * Rotten Tomatoes Rating of the movie.
+  //    * Country where the movie was produced.
+  //    * Language of the movie.
+  //    * Plot of the movie.
+  //    * Actors in the movie.
+
+  if(command === 'movie-this' && argString != '') {
+    lookupMovie(argString);
+  } else if (command === 'movie-this' && argString ==='') {
+    lookupMovie('Mr. Nobody')
+  }
+
+  if(command === 'do-what-it-says') {
+    for (i=0; i<lines_count; i++) {
+      setDelay(i);
+    }
+
+    function setDelay(i) {
+      setTimeout(function(){
+        var splits = lines[i].split(',')
+        var command = splits[0]
+        var arg = splits[1]
+        runLiri(command, arg)
+      }, i * 1500);
+    }
+      // Using a promise so that 'do-what-it-says' tasks finish in sequential order
+    // var bar = new Promise((resolve, reject) => {
+    //   array.forEach((value, index, array) => {
+    //     setTimeout(function() {
+    //       var splits = value.split(',')
+    //       var command = splits[0]
+    //       var arg = splits[1]
+    //       runLiri(command, arg)
+    //     },
+    //     2000);
+    //     if (index === array.length -1) resolve();
+    //   });
+    // });
+
+    // bar.then(() => {
+    //     console.log('All done!');
+    // });
+
+  } 
+
+}
+
+// This function looks up your most recent tweets and displays their text and date
+function lookupTweets(params) {
+  client.get('statuses/user_timeline', params)
+    .then(function (tweets) {
       for (var key in tweets) {
         var text = tweets[key].text;
         var date = tweets[key].created_at;
         var longdate = moment(date).format("dddd, MMMM Do YYYY, h:mm:ss a");
 
-        console.log('Tweet #' + key + ': ' + '"' + text + '"');
+        console.log('\nTweet #' + key + ': ' + '"' + text + '"');
         console.log(longdate);
         console.log('\n- - - - - - - - - - - - - - - - - - - - - - - - - -\n')
       }
+      getInput()
+    })
+    .catch(function (error) {
+      console.log('\nThere was an error! Try again!');
+      getInput()
+    })
+}
+
+// This function takes in a string  'song' and returns info about it from the Spotify API
+function lookupSong(params) {
+  spotify.search(params, function(err, data) {
+    if (data.tracks.items === undefined || data.tracks.items == 0) {
+      console.log('\n- - - - - - - - - - - - - - - - - - - - - - - - - -\n')
+      console.log('That\'s not a song in the Spotify database. Try another one!')
+      console.log('\n- - - - - - - - - - - - - - - - - - - - - - - - - -\n')
+      getInput()
+    } else {
+      // Code to run if response is not an error
+      var songObjects = data.tracks.items
+      for (var key in songObjects) {
+        var songArtists = songObjects[key].artists
+        var artistName = songArtists[0].name
+        var songName = songObjects[key].name
+        var preview_url = songObjects[key].preview_url
+        var albumName = songObjects[key].album.name
+        
+        // Log song's information to the console
+        console.log('Artist: ' + artistName)
+        console.log('Song: ' + songName)
+
+        if (preview_url === null) {
+          console.log('Preview: Not available')
+        } else {
+          console.log('Preview: ' + preview_url)
+        }
+        console.log('Album: ' + albumName)
+        console.log('\n- - - - - - - - - - - - - - - - - - - - - - - - - -\n')
+      } 
+      getInput()
     }
+
+    
   });
 }
- 
-if(command === 'spotify-this-song' && arg1 != '') {
-  console.log('\n***************************************************\n')
-  console.log('Looking up the song, ' + arg1)
-  console.log('\n***************************************************\n')
-  spotify
-    .search({ type: 'track', query: 'All the Small Things', limit: 2 })
-    .then(function(response) {
-      var songObjects = response.tracks.items
-      console.log(songObjects)
-      for (var key in songObjects) {
-        var artists = response.tracks.items[key].artists
-        artists.forEach(console.log(this.name))
-        
-        var name = response.tracks.items[key].name
-        var preview_url = response.tracks.items[key].preview_url
-        var album = response.tracks.items[key].album.name
+function lookupMovie(movie) {
+  var query = 'http://www.omdbapi.com/?apikey=trilogy&t=' + encodeURIComponent(movie)
+  request(query, function (error, response, body) {
+    var bodyObject = JSON.parse(body)
+    var title = bodyObject.Title
 
+    // handling faulty user input 
+    if (response && response.statusCode===200 && typeof title === "undefined") {
+      console.log('\n***************************************************\n')
+      console.log('Movie not found! Try again!')
+      console.log('\n***************************************************\n')
+      getInput()
+    // handling expected response
+    } else if (response && response.statusCode===200 && typeof title != 'undefined') {
+      console.log('\n***************************************************\n')
+      console.log('Looking up: ' + movie)
+      console.log('\n***************************************************\n')
+      // * Title of the movie.
+      var title  = bodyObject.Title
+      console.log('Title: ' + title)
 
-        console.log('Artist: ' + artists);
-        console.log('Song: ' + name);
-        console.log('Preview: ' + preview_url);
-        console.log('Album: ' + album);
-        console.log('\n- - - - - - - - - - - - - - - - - - - - - - - - - -\n')
-      }
-    })
-    .catch(function(err) {
-      console.log('That\s not a song in the Spotify database. Try another one!')
-    }); 
+      // * Year the movie came out.
+      var year = bodyObject.Year
+      console.log('Year: ' + year)
+
+      // * IMDB Rating of the movie.
+      var imdbRating = bodyObject.imdbRating
+      console.log('IMDB Rating: ' + imdbRating)
+
+      // * Rotten Tomatoes Rating of the movie.
+      var ratings = bodyObject.Ratings
+      ratings.forEach(function(element) {
+        var source = element.Source
+        // This code only runs if there is a Rotten Tomatoes rating in the response
+        if(source === 'Rotten Tomatoes') {
+          console.log('Rotten Tomatoes rating: ' + element.Value)
+        }
+      });
+
+      // * Country where the movie was produced.
+      var country = bodyObject.Country
+      console.log('Country: ' + country)
+
+      // * Language of the movie.
+      var language = bodyObject.Language
+      console.log('Language: ' + language)
+
+      // * Plot of the movie.
+      var plot = bodyObject.Plot
+      console.log('Plot: ' + plot)
+
+      // * Actors in the movie.
+      var actors = bodyObject.Actors
+      console.log('Actors: ' + actors)
+      console.log('\n- - - - - - - - - - - - - - - - - - - - - - - - - -\n')
+      getInput()
+    } else if(error) {
+      console.log('error:', error); // Print the error if one occurred
+      getInput()
+    }
+  });
+} 
+// function for displaying instructions to user
+function displayHelp() {
+  console.log('\n***************************************************\n')
+  console.log('LIRI is like iPhone\'s SIRI. However, while SIRI is a Speech Interpretation and Recognition Interface, LIRI is a Language Interpretation and Recognition Interface. LIRI takes in commands via the command line and gives you back data.\n')
+  console.log('LIRI accepts the following commands:\n')
+  console.log('`my-tweets`\n')
+  console.log('This will show your last 20 tweets and when they were created\n')
+  console.log('`spotify-this-song <song name>`\n')
+  console.log('This will show information about the song retrived from the Spotify API.\n')
+  console.log('`movie-this <movie name>`\n')
+  console.log('This will show information about the movie retrieved from the OMDB API\n')
+  console.log('`do-what-it-says`\n')
+  console.log('Using the fs Node package, LIRI will take the text inside of random.txt and use it to call one of LIRI\'s commands.\n')
+  console.log('-----\n')
+  console.log('For example, try entering:\n')
+  console.log('`movie-this the cat in the hat`\n')
+  console.log('-----\n')
 }
 
-// inquirer.prompt([
-
-//   {
-//     type: "input",
-//     name: "userInput",
-//     message: "Which location or landmark would you like to geocode?"
-//   }
-
-// // After the prompt, store the user's response in a variable called location.
-// ]).then(function(location) {
-
-//   // console.log(location.userInput);
-
-//   // Then use the Google Geocoder to Geocode the address
-//   // geocoder.geocode(location.userInput, function(err, data) {
-
-//   //   console.log(JSON.stringify(data, null, 2));
-//   // });
-
-// });
 
 
-// // Here's the variable we will be modifying with the new numbers
-// var outputNum;
-
-// // Determines the operand selected...
-// // Based on the operand we run the appropriate math on the two numbers
-// if (operand === "add") {
-//   outputNum = parseFloat(num1) + parseFloat(num2);
-// }
-
-// else if (operand === "subtract") {
-//   outputNum = parseFloat(num1) - parseFloat(num2);
-// }
-
-// else if (operand === "multiply") {
-//   outputNum = parseFloat(num1) * parseFloat(num2);
-// }
-
-// else if (operand === "divide") {
-//   outputNum = parseFloat(num1) / parseFloat(num2);
-// }
-
-// else if (operand === "remainder") {
-//   outputNum = parseFloat(num1) % parseFloat(num2);
-// }
-
-// else if (operand === "exp") {
-//   outputNum = Math.pow(num1, num2);
-// }
-
-// else if (operand === "algebra") {
-//   outputNum = parseAlgebra(num1);
-// }
-
-// else {
-//   outputNum = "Not a recognized command";
-// }
-
-
-// // Prints the outputNumber
-// console.log(outputNum);
-
-
-//
-   // * Title of the movie.
-   // * Year the movie came out.
-   // * IMDB Rating of the movie.
-   // * Rotten Tomatoes Rating of the movie.
-   // * Country where the movie was produced.
-   // * Language of the movie.
-   // * Plot of the movie.
-   // * Actors in the movie.

@@ -1,6 +1,6 @@
 # liri-node-app
 
-<img src="letterL.png" alt="LIRI" width="200" height="240">
+<img src="letterL.png" alt="LIRI" width="180" height="180">
 
 #### LIRI is like iPhone's SIRI. However, while SIRI is a Speech Interpretation and Recognition Interface, LIRI is a Language Interpretation and Recognition Interface. LIRI takes in commands via the command line and gives you back data.
 

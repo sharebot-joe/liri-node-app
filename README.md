@@ -19,15 +19,15 @@ To use LIRI to retrieve API data, you'll need to create a .env file with your pe
 
 **Spotify API keys**
 
-* SPOTIFY_ID=your-spotify-id
-* SPOTIFY_SECRET=your-spotify-secret
+`SPOTIFY_ID=your-spotify-id`
+`SPOTIFY_SECRET=your-spotify-secret`
 
 **Twitter API keys**
 
-* TWITTER_CONSUMER_KEY=your-twitter-consumer-key
-* TWITTER_CONSUMER_SECRET=your-twitter-consumer-secret
-* TWITTER_ACCESS_TOKEN_KEY=your-access-token-key
-* TWITTER_ACCESS_TOKEN_SECRET=your-twitter-access-token-secret
+`TWITTER_CONSUMER_KEY=your-twitter-consumer-key`
+`TWITTER_CONSUMER_SECRET=your-twitter-consumer-secret`
+`TWITTER_ACCESS_TOKEN_KEY=your-access-token-key`
+`TWITTER_ACCESS_TOKEN_SECRET=your-twitter-access-token-secret`
 
 The .env file will be used by the dotenv package to set environment variables for your node session.
 
@@ -51,6 +51,10 @@ Get your Spotify API keys by following these steps:
 
 ## Running LIRI
 
-Clone this Github repository and place the .env file you created above (now with new API keys!) into the cloned repo's root. Now open a console window and navigate to the cloned repo.
+Assuming you have Node.js installed on your computer:
 
-Run `npm install` then run `node liri.js`. LIRI should appear in the console window. Follow the instructions and commands on screen to interact with LIRI!
+1. Clone this Github repository and place the .env file you created above (now containing your new API keys!) into the cloned repo. 
+2. Open a console window and navigate to the cloned repo.
+3. Run `npm install` 
+4. Run `node liri.js`. 
+5. LIRI should start in the console window. Follow the instructions on the screen!

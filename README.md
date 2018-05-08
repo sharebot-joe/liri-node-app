@@ -56,5 +56,5 @@ Assuming you have Node.js installed on your computer:
 1. Clone this Github repository and place the .env file you created above (now containing your new API keys!) into the cloned repo. 
 2. Open a console window and navigate to the cloned repo.
 3. Run `npm install` 
-4. Run `node liri.js`. 
+4. Run `node liri.js'
 5. LIRI should start in the console window. Follow the instructions on the screen!

@@ -20,7 +20,7 @@ var spotify = new Spotify(keys.spotify);
 var commands = ['my-tweets', 'spotify-this-song', 'movie-this', 'do-what-it-says']
 
 // random.txt
-var lines = fs.readFileSync('../random.txt').toString().split('\n');
+var lines = fs.readFileSync('./random.txt').toString().split('\n');
 var lines_count = lines.length - 1;
 
 // Display help

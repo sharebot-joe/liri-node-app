@@ -270,7 +270,7 @@ function displayHelp() {
   console.log('`my-tweets`\n')
   console.log('This will show your last 20 tweets and when they were created\n')
   console.log('`spotify-this-song <song name>`\n')
-  console.log('This will show information about the song retrived from the Spotify API.\n')
+  console.log('This will show information about the song retrieved from the Spotify API.\n')
   console.log('`movie-this <movie name>`\n')
   console.log('This will show information about the movie retrieved from the OMDB API\n')
   console.log('`do-what-it-says`\n')

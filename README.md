@@ -51,7 +51,6 @@ Get your Spotify API keys by following these steps:
 
 ## Running LIRI
 
-Clone this Github repository and place the .env file you created above (now with new API keys!) into the cloned repo's root directory. Now open a console window, navigate to the local LIRI directory and run `node liri.js`.
+Clone this Github repository and place the .env file you created above (now with new API keys!) into the cloned repo's root directory. Now open a console window and navigate to the local LIRI directory
 
-Follow the instructions and commands on screen to interact with LIRI!
-
+First run `npm install` then run `node liri.js`. LIRI should appear in the console window. Follow the instructions and commands on screen to interact with LIRI!

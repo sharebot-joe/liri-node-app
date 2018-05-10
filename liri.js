@@ -66,7 +66,7 @@ function runLiri(command, argString) {
     console.log('Invalid command! Try again!')
     displayHelp()
   }
-  // Code for the 'my-tweets' command. This will show your last 20 tweets and when they were created at in your terminal/bash window. 
+  // The 'my-tweets' command will show your last 20 tweets and when they were created at in your terminal/bash window. 
   if(command === 'my-tweets') {
     console.log('\n***************************************************\n')
     var params = {screen_name: 'real_joeyk', count: 20};
@@ -75,7 +75,7 @@ function runLiri(command, argString) {
     lookupTweets(params)
   }
 
-  // Code for the 'spotify-this-song' command. This will show the following information about the song in your terminal/bash window: 
+  // The 'spotify-this-song' command will look up song info and diplay it in your terminal window: 
   //    * Artist(s)
   //    * The song's name
   //    * A preview link of the song from Spotify
@@ -92,7 +92,7 @@ function runLiri(command, argString) {
     console.log('\n- - - - - - - - - - - - - - - - - - - - - - - - - -\n')
     lookupSong(params)
   }
-  // Code for the 'movie-this' command. This will output the following information to your terminal/bash window: 
+  // The 'movie-this' command will output the following to your terminal: 
   //    * Title of the movie.
   //    * Year the movie came out.
   //    * IMDB Rating of the movie.
